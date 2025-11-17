@@ -1,4 +1,4 @@
-# essika
+# Essika
 
 Une app pour gerer ses abonnements
 
