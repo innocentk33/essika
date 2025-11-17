@@ -17,17 +17,22 @@ const CategorySchema = CollectionSchema(
   name: r'Category',
   id: 5751694338128944171,
   properties: {
-    r'description': PropertySchema(
+    r'defaultCategory': PropertySchema(
       id: 0,
+      name: r'defaultCategory',
+      type: IsarType.bool,
+    ),
+    r'description': PropertySchema(
+      id: 1,
       name: r'description',
       type: IsarType.string,
     ),
     r'imagePath': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'imagePath',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(id: 2, name: r'name', type: IsarType.string),
+    r'name': PropertySchema(id: 3, name: r'name', type: IsarType.string),
   },
 
   estimateSize: _categoryEstimateSize,
@@ -73,9 +78,10 @@ void _categorySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.description);
-  writer.writeString(offsets[1], object.imagePath);
-  writer.writeString(offsets[2], object.name);
+  writer.writeBool(offsets[0], object.defaultCategory);
+  writer.writeString(offsets[1], object.description);
+  writer.writeString(offsets[2], object.imagePath);
+  writer.writeString(offsets[3], object.name);
 }
 
 Category _categoryDeserialize(
@@ -84,10 +90,11 @@ Category _categoryDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Category(name: reader.readString(offsets[2]));
-  object.description = reader.readStringOrNull(offsets[0]);
+  final object = Category(name: reader.readString(offsets[3]));
+  object.defaultCategory = reader.readBool(offsets[0]);
+  object.description = reader.readStringOrNull(offsets[1]);
   object.id = id;
-  object.imagePath = reader.readStringOrNull(offsets[1]);
+  object.imagePath = reader.readStringOrNull(offsets[2]);
   return object;
 }
 
@@ -99,10 +106,12 @@ P _categoryDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -201,6 +210,15 @@ extension CategoryQueryWhere on QueryBuilder<Category, Category, QWhereClause> {
 
 extension CategoryQueryFilter
     on QueryBuilder<Category, Category, QFilterCondition> {
+  QueryBuilder<Category, Category, QAfterFilterCondition>
+  defaultCategoryEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'defaultCategory', value: value),
+      );
+    });
+  }
+
   QueryBuilder<Category, Category, QAfterFilterCondition> descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -740,6 +758,18 @@ extension CategoryQueryLinks
     on QueryBuilder<Category, Category, QFilterCondition> {}
 
 extension CategoryQuerySortBy on QueryBuilder<Category, Category, QSortBy> {
+  QueryBuilder<Category, Category, QAfterSortBy> sortByDefaultCategory() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'defaultCategory', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Category, Category, QAfterSortBy> sortByDefaultCategoryDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'defaultCategory', Sort.desc);
+    });
+  }
+
   QueryBuilder<Category, Category, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -779,6 +809,18 @@ extension CategoryQuerySortBy on QueryBuilder<Category, Category, QSortBy> {
 
 extension CategoryQuerySortThenBy
     on QueryBuilder<Category, Category, QSortThenBy> {
+  QueryBuilder<Category, Category, QAfterSortBy> thenByDefaultCategory() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'defaultCategory', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Category, Category, QAfterSortBy> thenByDefaultCategoryDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'defaultCategory', Sort.desc);
+    });
+  }
+
   QueryBuilder<Category, Category, QAfterSortBy> thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -830,6 +872,12 @@ extension CategoryQuerySortThenBy
 
 extension CategoryQueryWhereDistinct
     on QueryBuilder<Category, Category, QDistinct> {
+  QueryBuilder<Category, Category, QDistinct> distinctByDefaultCategory() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'defaultCategory');
+    });
+  }
+
   QueryBuilder<Category, Category, QDistinct> distinctByDescription({
     bool caseSensitive = true,
   }) {
@@ -860,6 +908,12 @@ extension CategoryQueryProperty
   QueryBuilder<Category, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Category, bool, QQueryOperations> defaultCategoryProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'defaultCategory');
     });
   }
 
