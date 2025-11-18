@@ -21,6 +21,12 @@ class SubscriptionProvider extends ChangeNotifier {
 
   int get activeCount => _subscriptions.where((s) => s.isActive).length;
 
+  double get totalMonthlyStartedThisMonth {
+    final now = DateTime.now();
+    return _subscriptions
+        .where((s) => s.isActive && s.startDate.year == now.year && s.startDate.month == now.month)
+        .fold(0.0, (sum, s) => sum + s.monthlyPrice);
+  }
   SubscriptionProvider() {
     loadSubscriptions();
     _listenToChanges(); // Watch en temps réel

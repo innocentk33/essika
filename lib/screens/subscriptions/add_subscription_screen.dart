@@ -94,7 +94,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
                   _selectedTemplate = service;
                   _serviceController.text = service.name;
                   _priceController.text = service.suggestedPrice?.toString() ?? '';
-                  _selectedCycle = service.suggestedCycle ?? BillingCycle.monthly;
+                  _selectedCycle = service.suggestedCycle;
                   _selectedCategory = service.category ?? 'Autres';
                 });
               },
@@ -125,7 +125,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
 
             // Catégorie (dropdown)
             DropdownButtonFormField<String>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               decoration: InputDecoration(
                 labelText: 'Catégorie',
                 border: OutlineInputBorder(),
@@ -172,7 +172,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
 
             // Fréquence
             DropdownButtonFormField<BillingCycle>(
-              value: _selectedCycle,
+              initialValue: _selectedCycle,
               decoration: InputDecoration(
                 labelText: 'Fréquence de paiement',
                 border: OutlineInputBorder(),

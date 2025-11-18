@@ -39,6 +39,13 @@ class HomeScreen extends StatelessWidget {
                   Text('Cette semaine', style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
+
+              Row(
+                children: [
+                  Text('Mes abonnement actifs', style: Theme.of(context).textTheme.titleMedium),
+                ],
+              ),
+
               // Liste
               Expanded(
                 child: ListView.builder(
@@ -104,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                 _buildStatItem(
                   context,
                   'Total mensuel',
-                  '${provider.totalMonthly.toStringAsFixed(2)} €',
+                  '${provider.totalMonthlyStartedThisMonth.toStringAsFixed(2)} €',
                   Icons.euro,
                 ),
                 _buildStatItem(
