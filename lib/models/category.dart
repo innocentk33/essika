@@ -5,24 +5,35 @@ part 'category.g.dart';
 @Collection()
 class Category {
   Id id = Isar.autoIncrement;
-  final String name;
-  String? description;
-  String? imagePath;
-  bool defaultCategory = false;
 
-  Category({required this.name});
+  @Index(unique: true)
+  late String name;
+
+  String? iconName; // Nom de l'icône
+  String? colorHex; // Couleur en hex
+
+  bool isDefault; // Catégorie système non supprimable
+
+  Category({
+    this.name = '',
+    this.iconName,
+    this.colorHex,
+    this.isDefault = false,
+  });
 }
 
 extension CategoryExtension on Category {
   Category copyWith({
     String? name,
-    String? description,
-    String? imagePath,
+    String? iconName,
+    String? colorHex,
+    bool? isDefault,
   }) {
     return Category(
       name: name ?? this.name,
-    )
-      ..description = description ?? this.description
-      ..imagePath = imagePath ?? this.imagePath;
+      iconName: iconName ?? this.iconName,
+      colorHex: colorHex ?? this.colorHex,
+      isDefault: isDefault ?? this.isDefault,
+    );
   }
 }

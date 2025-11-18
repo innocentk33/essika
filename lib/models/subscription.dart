@@ -1,47 +1,72 @@
-import 'package:essika/core/enum/frequence.dart';
 import 'package:isar_community/isar.dart';
+
+import '../core/enum/billing_cycle.dart';
 
 part 'subscription.g.dart';
 
 @Collection()
 class Subscription {
   Id id = Isar.autoIncrement;
-  final String name;
-  final double amount;
-  DateTime startDate = DateTime.now();
-  DateTime nextPaymentDate = DateTime.now();
-  bool isActive = false;
-  String? imagePath;
+
+  late String serviceName; // Netflix, Spotify, etc.
+  late double price;
 
   @enumerated
-  final Frequency frequency;
+  late BillingCycle billingCycle;
 
-  Subscription({
-    required this.name,
-    required this.amount,
-    required this.frequency,
-  });
+  late DateTime startDate;
+  DateTime? endDate;
+
+  String? description;
+
+  @Index() // Index pour filtrage rapide
+  late String category; // 'Divertissement', 'Sport', etc.
+
+  String? logoUrl; // Path vers le logo
+
+  @Index()
+  late bool isActive;
+
+  // Computed property
+  @ignore
+  double get monthlyPrice {
+    switch (billingCycle) {
+      case BillingCycle.monthly:
+        return price;
+      case BillingCycle.yearly:
+        return price / 12;
+      case BillingCycle.weekly:
+        return price * 4.33; // Moyenne plus précise
+    }
+  }
+
+  @ignore
+  double get yearlyPrice => monthlyPrice * 12;
 }
 // facilitate the copyWith method
 
 extension SubscriptionExtension on Subscription {
   Subscription copyWith({
-    String? name,
-    double? amount,
+    String? serviceName,
+    double? price,
+    BillingCycle? billingCycle,
     DateTime? startDate,
-    DateTime? nextPaymentDate,
+    DateTime? endDate,
+    String? description,
+    String? category,
+    String? logoUrl,
     bool? isActive,
-    String? imagePath,
-    Frequency? frequency,
   }) {
-    return Subscription(
-        name: name ?? this.name,
-        amount: amount ?? this.amount,
-        frequency: frequency ?? this.frequency,
-      )
+    return Subscription()
+      ..id = id
+      ..serviceName = serviceName ?? this.serviceName
+      ..price = price ?? this.price
+      ..billingCycle = billingCycle ?? this.billingCycle
       ..startDate = startDate ?? this.startDate
-      ..nextPaymentDate = nextPaymentDate ?? this.nextPaymentDate
-      ..isActive = isActive ?? this.isActive
-      ..imagePath = imagePath ?? this.imagePath;
+      ..endDate = endDate ?? this.endDate
+      ..description = description ?? this.description
+      ..category = category ?? this.category
+      ..logoUrl = logoUrl ?? this.logoUrl
+      ..isActive = isActive ?? this.isActive;
   }
 }
