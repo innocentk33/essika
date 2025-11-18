@@ -1,3 +1,4 @@
+import 'package:essika/models/renewal_event.dart';
 import 'package:essika/models/subscription.dart';
 import 'package:flutter/rendering.dart';
 import 'package:isar_community/isar.dart';
@@ -13,7 +14,12 @@ class IsarService {
   static Future<void> initDatabase() async {
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open(
-      [CategorySchema, SubscriptionSchema, ServiceTemplateSchema],
+      [
+        CategorySchema,
+        SubscriptionSchema,
+        ServiceTemplateSchema,
+        RenewalEventSchema,
+      ],
       directory: dir.path,
       inspector: true,
     );

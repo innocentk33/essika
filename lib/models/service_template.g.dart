@@ -157,15 +157,10 @@ P _serviceTemplateDeserializeProp<P>(
   }
 }
 
-const _ServiceTemplatesuggestedCycleEnumValueMap = {
-  'weekly': 0,
-  'monthly': 1,
-  'yearly': 2,
-};
+const _ServiceTemplatesuggestedCycleEnumValueMap = {'monthly': 0, 'yearly': 1};
 const _ServiceTemplatesuggestedCycleValueEnumMap = {
-  0: BillingCycle.weekly,
-  1: BillingCycle.monthly,
-  2: BillingCycle.yearly,
+  0: BillingCycle.monthly,
+  1: BillingCycle.yearly,
 };
 
 Id _serviceTemplateGetId(ServiceTemplate object) {

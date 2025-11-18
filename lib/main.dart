@@ -5,24 +5,26 @@ import 'package:essika/providers/service_template.dart';
 import 'package:essika/providers/settings_provider.dart';
 import 'package:essika/providers/subscription_provider.dart';
 import 'package:essika/screens/home/home_screen.dart';
+import 'package:essika/screens/settings/settings_screen.dart';
 import 'package:essika/screens/subscriptions/add_subscription_screen.dart';
 import 'package:essika/screens/subscriptions/detail_subscription_screen.dart';
 import 'package:essika/services/isar_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await IsarService.initDatabase();
+  await initializeDateFormatting('fr', null);
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_)=>IsarService.instance),
+        Provider(create: (_) => IsarService.instance),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => ServiceTemplateProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
-
       ],
       child: const MyApp(),
     ),
@@ -43,6 +45,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => AppNavigation(),
         '/home': (context) => const HomeScreen(),
+        '/settings': (context) => const SettingsScreen(),
         '/add-subscription': (context) => const AddSubscriptionScreen(),
         '/subscription-detail': (context) => const DetailSubscriptionScreen(),
       },

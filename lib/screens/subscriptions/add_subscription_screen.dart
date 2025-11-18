@@ -239,8 +239,6 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
 
   String _getCycleLabel(BillingCycle cycle) {
     switch (cycle) {
-      case BillingCycle.weekly:
-        return 'Hebdomadaire';
       case BillingCycle.monthly:
         return 'Mensuel';
       case BillingCycle.yearly:

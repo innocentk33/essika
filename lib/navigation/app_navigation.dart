@@ -1,7 +1,7 @@
+import 'package:essika/screens/calendar/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/settings/settings_screen.dart';
-import '../screens/stats/stats_screen.dart';
 
 class AppNavigation extends StatefulWidget {
   const AppNavigation({super.key});
@@ -16,17 +16,14 @@ class _AppNavigationState extends State<AppNavigation> {
   // Liste des écrans de la bottom nav
   final List<Widget> _screens = [
     HomeScreen(),
-    StatsScreen(),
+    CalendarScreen(),
     SettingsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -41,8 +38,8 @@ class _AppNavigationState extends State<AppNavigation> {
             label: 'Abonnements',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Statistiques',
+            icon: Icon(Icons.calendar_month_outlined),
+            label: 'Calendrier',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

@@ -35,8 +35,6 @@ class Subscription {
         return price;
       case BillingCycle.yearly:
         return price / 12;
-      case BillingCycle.weekly:
-        return price * 4.33; // Moyenne plus précise
     }
   }
 

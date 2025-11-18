@@ -146,7 +146,7 @@ Subscription _subscriptionDeserialize(
       _SubscriptionbillingCycleValueEnumMap[reader.readByteOrNull(
         offsets[0],
       )] ??
-      BillingCycle.weekly;
+      BillingCycle.monthly;
   object.category = reader.readString(offsets[1]);
   object.description = reader.readStringOrNull(offsets[2]);
   object.endDate = reader.readDateTimeOrNull(offsets[3]);
@@ -170,7 +170,7 @@ P _subscriptionDeserializeProp<P>(
       return (_SubscriptionbillingCycleValueEnumMap[reader.readByteOrNull(
                 offset,
               )] ??
-              BillingCycle.weekly)
+              BillingCycle.monthly)
           as P;
     case 1:
       return (reader.readString(offset)) as P;
@@ -193,15 +193,10 @@ P _subscriptionDeserializeProp<P>(
   }
 }
 
-const _SubscriptionbillingCycleEnumValueMap = {
-  'weekly': 0,
-  'monthly': 1,
-  'yearly': 2,
-};
+const _SubscriptionbillingCycleEnumValueMap = {'monthly': 0, 'yearly': 1};
 const _SubscriptionbillingCycleValueEnumMap = {
-  0: BillingCycle.weekly,
-  1: BillingCycle.monthly,
-  2: BillingCycle.yearly,
+  0: BillingCycle.monthly,
+  1: BillingCycle.yearly,
 };
 
 Id _subscriptionGetId(Subscription object) {
