@@ -39,6 +39,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
     final serviceProvider = context.watch<ServiceTemplateProvider>();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Nouvel abonnement'),
       ),
@@ -55,6 +56,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
               children: serviceProvider.popularServices.map((service) {
                 final isSelected = _selectedTemplate?.id == service.id;
                 return FilterChip(
+                  avatar: Icon(Icons.business),
                   label: Text(service.name),
                   selected: isSelected,
                   onSelected: (selected) {

@@ -1,6 +1,7 @@
 import 'package:essika/core/const/app_routes.dart';
 import 'package:essika/navigation/app_navigation.dart';
 import 'package:essika/providers/category_provider.dart';
+import 'package:essika/providers/renewal_event_provider.dart';
 import 'package:essika/providers/service_template.dart';
 import 'package:essika/providers/settings_provider.dart';
 import 'package:essika/providers/subscription_provider.dart';
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => ServiceTemplateProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => RenewalEventProvider()),
       ],
       child: const MyApp(),
     ),

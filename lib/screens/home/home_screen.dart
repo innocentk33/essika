@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/subscription_provider.dart';
+import '../calendar/widgets/week_calendar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -39,6 +40,8 @@ class HomeScreen extends StatelessWidget {
                   Text('Cette semaine', style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
+              // Vue calendrier simplifiée sur une semaine
+               WeekCalendarWidget(),
 
               Row(
                 children: [
