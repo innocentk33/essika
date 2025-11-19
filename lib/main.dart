@@ -7,6 +7,7 @@ import 'package:essika/providers/settings_provider.dart';
 import 'package:essika/providers/subscription_provider.dart';
 import 'package:essika/screens/home/home_screen.dart';
 import 'package:essika/screens/settings/settings_screen.dart';
+import 'package:essika/screens/settings/manage_services_screen.dart';
 import 'package:essika/screens/subscriptions/add_subscription_screen.dart';
 import 'package:essika/screens/subscriptions/detail_subscription_screen.dart';
 import 'package:essika/services/isar_service.dart';
@@ -49,7 +50,19 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/add-subscription': (context) => const AddSubscriptionScreen(),
-        '/subscription-detail': (context) => const DetailSubscriptionScreen(),
+        '/manage-services': (context) => const ManageServicesScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == AppRoutes.subscriptionDetail) {
+          final args = settings.arguments as Map<String, dynamic>;
+          final subscriptionId = args['id'] as int;
+          return MaterialPageRoute(
+            builder: (context) => DetailSubscriptionScreen(
+              subscriptionId: subscriptionId,
+            ),
+          );
+        }
+        return null;
       },
     );
   }

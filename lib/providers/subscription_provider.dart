@@ -71,7 +71,11 @@ class SubscriptionProvider extends ChangeNotifier {
     await _regenerateRenewals(subscription);
     notifyListeners();
   }
-
+  // Read
+  Future<Subscription?> getSubscriptionById(int id) async {
+    return await _isar.subscriptions.get(id);
+  }
+  // Update
   Future<void> updateSubscription(Subscription subscription) async {
     await _isar.writeTxn(() async {
       await _isar.subscriptions.put(subscription);
@@ -79,7 +83,7 @@ class SubscriptionProvider extends ChangeNotifier {
     await _regenerateRenewals(subscription);
     notifyListeners();
   }
-
+  // Delete
   Future<void> deleteSubscription(int id) async {
     await _isar.writeTxn(() async {
       await _isar.subscriptions.delete(id);

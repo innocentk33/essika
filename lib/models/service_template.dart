@@ -19,6 +19,7 @@ class ServiceTemplate {
   late BillingCycle suggestedCycle;
 
   bool isPopular; // Pour trier les plus utilisés
+  bool isDefault; // Pour ne pas supprimer
 
   ServiceTemplate({
     this.name = '',
@@ -27,6 +28,7 @@ class ServiceTemplate {
     this.suggestedPrice,
     this.suggestedCycle = BillingCycle.monthly,
     this.isPopular = false,
+    this.isDefault = false,
   });
 }
 extension ServiceTemplateExtension on ServiceTemplate {
@@ -37,6 +39,7 @@ extension ServiceTemplateExtension on ServiceTemplate {
     double? suggestedPrice,
     BillingCycle? suggestedCycle,
     bool? isPopular,
+    bool? isDefault,
   }) {
     return ServiceTemplate(
       name: name ?? this.name,
@@ -45,6 +48,7 @@ extension ServiceTemplateExtension on ServiceTemplate {
       suggestedPrice: suggestedPrice ?? this.suggestedPrice,
       suggestedCycle: suggestedCycle ?? this.suggestedCycle,
       isPopular: isPopular ?? this.isPopular,
+      isDefault: isDefault?? this.isDefault,
     );
   }
 }

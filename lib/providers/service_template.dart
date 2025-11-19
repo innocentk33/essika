@@ -54,4 +54,27 @@ class ServiceTemplateProvider extends ChangeNotifier {
     });
     await loadServices();
   }
+
+  // Mettre à jour un service
+  Future<void> updateService(ServiceTemplate service) async {
+    await _isar.writeTxn(() async {
+      await _isar.serviceTemplates.put(service);
+    });
+    await loadServices();
+  }
+
+  // Supprimer un service
+  Future<bool> deleteService(int id) async {
+    final service = await _isar.serviceTemplates.get(id);
+
+    if (service == null || service.isDefault) {
+      return false; // Ne pas supprimer les services système
+    }
+
+    await _isar.writeTxn(() async {
+      await _isar.serviceTemplates.delete(id);
+    });
+    await loadServices();
+    return true;
+  }
 }

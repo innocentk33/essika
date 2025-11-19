@@ -2,33 +2,6 @@ import '../../models/category.dart';
 import '../../models/service_template.dart';
 import '../enum/billing_cycle.dart';
 
-const List<String> categoryImages = [
-  'assets/images/category_icons/shopping.png',
-  'assets/images/category_icons/food.png',
-  'assets/images/category_icons/transportation.png',
-  'assets/images/category_icons/entertainment.png',
-  'assets/images/category_icons/health.png',
-  'assets/images/category_icons/utilities.png',
-  'assets/images/category_icons/education.png',
-  'assets/images/category_icons/travel.png',
-  'assets/images/category_icons/gifts.png',
-  'assets/images/category_icons/others.png',
-  'assets/images/category_icons/sport.png',
-];
-
-const List<String> defaultCategoryNames = [
-  'Vêtements',
-  'Nourriture',
-  'Transport',
-  'Divertissement',
-  'Santé',
-  'Services publics',
-  'Éducation',
-  'Voyage',
-  'Cadeaux',
-  'Autres',
-  'Sport',
-];
 final defaultCategories = [
   Category(
     name: 'Vêtements',
@@ -105,6 +78,7 @@ final defaultServices = [
     suggestedPrice: 13.49,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Disney+',
@@ -112,6 +86,7 @@ final defaultServices = [
     suggestedPrice: 8.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Amazon Prime Video',
@@ -119,6 +94,7 @@ final defaultServices = [
     suggestedPrice: 6.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Canal+',
@@ -126,6 +102,7 @@ final defaultServices = [
     suggestedPrice: 22.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'OCS',
@@ -133,6 +110,7 @@ final defaultServices = [
     suggestedPrice: 11.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Apple TV+',
@@ -140,6 +118,7 @@ final defaultServices = [
     suggestedPrice: 6.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Musique & Audio
@@ -149,6 +128,7 @@ final defaultServices = [
     suggestedPrice: 10.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Apple Music',
@@ -156,6 +136,7 @@ final defaultServices = [
     suggestedPrice: 10.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Deezer',
@@ -163,6 +144,7 @@ final defaultServices = [
     suggestedPrice: 10.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'YouTube Premium',
@@ -170,6 +152,7 @@ final defaultServices = [
     suggestedPrice: 11.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Audible',
@@ -177,6 +160,7 @@ final defaultServices = [
     suggestedPrice: 9.95,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Cloud & Stockage
@@ -186,6 +170,7 @@ final defaultServices = [
     suggestedPrice: 0.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Google One',
@@ -193,6 +178,7 @@ final defaultServices = [
     suggestedPrice: 1.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Dropbox',
@@ -200,6 +186,7 @@ final defaultServices = [
     suggestedPrice: 11.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'OneDrive',
@@ -207,6 +194,7 @@ final defaultServices = [
     suggestedPrice: 2.00,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Sport & Fitness
@@ -216,6 +204,7 @@ final defaultServices = [
     suggestedPrice: 24.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Keep Cool',
@@ -223,22 +212,25 @@ final defaultServices = [
     suggestedPrice: 29.90,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
-    name: 'Nike Training Club',
+    name: 'Fitness Park',
     category: 'Sport',
-    suggestedPrice: 14.99,
+    suggestedPrice: 19.90,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Éducation & Productivité
   ServiceTemplate(
-    name: 'Notion',
+    name: 'ChatGPT Plus',
     category: 'Éducation',
-    suggestedPrice: 8.00,
+    suggestedPrice: 20.00,
     suggestedCycle: BillingCycle.monthly,
-    isPopular: false,
+    isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Duolingo Plus',
@@ -246,6 +238,7 @@ final defaultServices = [
     suggestedPrice: 6.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'LinkedIn Premium',
@@ -253,6 +246,7 @@ final defaultServices = [
     suggestedPrice: 29.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Babbel',
@@ -260,6 +254,7 @@ final defaultServices = [
     suggestedPrice: 9.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Transport
@@ -269,6 +264,7 @@ final defaultServices = [
     suggestedPrice: 75.20,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Vélib',
@@ -276,24 +272,8 @@ final defaultServices = [
     suggestedPrice: 8.30,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
-
-  // Presse & Actualités
-  ServiceTemplate(
-    name: 'Le Monde',
-    category: 'Éducation',
-    suggestedPrice: 10.00,
-    suggestedCycle: BillingCycle.monthly,
-    isPopular: false,
-  ),
-  ServiceTemplate(
-    name: 'Mediapart',
-    category: 'Éducation',
-    suggestedPrice: 11.00,
-    suggestedCycle: BillingCycle.monthly,
-    isPopular: false,
-  ),
-
   // Gaming
   ServiceTemplate(
     name: 'PlayStation Plus',
@@ -301,6 +281,7 @@ final defaultServices = [
     suggestedPrice: 8.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Xbox Game Pass',
@@ -308,6 +289,7 @@ final defaultServices = [
     suggestedPrice: 12.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Nintendo Switch Online',
@@ -315,6 +297,7 @@ final defaultServices = [
     suggestedPrice: 3.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 
   // Services publics
@@ -324,6 +307,7 @@ final defaultServices = [
     suggestedPrice: 75.00,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'SFR Box',
@@ -331,6 +315,7 @@ final defaultServices = [
     suggestedPrice: 35.00,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Free Mobile',
@@ -338,6 +323,7 @@ final defaultServices = [
     suggestedPrice: 19.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Orange',
@@ -345,6 +331,7 @@ final defaultServices = [
     suggestedPrice: 22.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
+    isDefault: true,
   ),
   ServiceTemplate(
     name: 'Bouygues Telecom',
@@ -352,5 +339,6 @@ final defaultServices = [
     suggestedPrice: 24.99,
     suggestedCycle: BillingCycle.monthly,
     isPopular: false,
+    isDefault: true,
   ),
 ];

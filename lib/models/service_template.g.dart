@@ -22,21 +22,26 @@ const ServiceTemplateSchema = CollectionSchema(
       name: r'category',
       type: IsarType.string,
     ),
-    r'isPopular': PropertySchema(
+    r'isDefault': PropertySchema(
       id: 1,
+      name: r'isDefault',
+      type: IsarType.bool,
+    ),
+    r'isPopular': PropertySchema(
+      id: 2,
       name: r'isPopular',
       type: IsarType.bool,
     ),
-    r'logoUrl': PropertySchema(id: 2, name: r'logoUrl', type: IsarType.string),
-    r'name': PropertySchema(id: 3, name: r'name', type: IsarType.string),
+    r'logoUrl': PropertySchema(id: 3, name: r'logoUrl', type: IsarType.string),
+    r'name': PropertySchema(id: 4, name: r'name', type: IsarType.string),
     r'suggestedCycle': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'suggestedCycle',
       type: IsarType.byte,
       enumMap: _ServiceTemplatesuggestedCycleEnumValueMap,
     ),
     r'suggestedPrice': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'suggestedPrice',
       type: IsarType.double,
     ),
@@ -100,11 +105,12 @@ void _serviceTemplateSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.category);
-  writer.writeBool(offsets[1], object.isPopular);
-  writer.writeString(offsets[2], object.logoUrl);
-  writer.writeString(offsets[3], object.name);
-  writer.writeByte(offsets[4], object.suggestedCycle.index);
-  writer.writeDouble(offsets[5], object.suggestedPrice);
+  writer.writeBool(offsets[1], object.isDefault);
+  writer.writeBool(offsets[2], object.isPopular);
+  writer.writeString(offsets[3], object.logoUrl);
+  writer.writeString(offsets[4], object.name);
+  writer.writeByte(offsets[5], object.suggestedCycle.index);
+  writer.writeDouble(offsets[6], object.suggestedPrice);
 }
 
 ServiceTemplate _serviceTemplateDeserialize(
@@ -115,15 +121,16 @@ ServiceTemplate _serviceTemplateDeserialize(
 ) {
   final object = ServiceTemplate(
     category: reader.readStringOrNull(offsets[0]),
-    isPopular: reader.readBoolOrNull(offsets[1]) ?? false,
-    logoUrl: reader.readStringOrNull(offsets[2]),
-    name: reader.readStringOrNull(offsets[3]) ?? '',
+    isDefault: reader.readBoolOrNull(offsets[1]) ?? false,
+    isPopular: reader.readBoolOrNull(offsets[2]) ?? false,
+    logoUrl: reader.readStringOrNull(offsets[3]),
+    name: reader.readStringOrNull(offsets[4]) ?? '',
     suggestedCycle:
         _ServiceTemplatesuggestedCycleValueEnumMap[reader.readByteOrNull(
-          offsets[4],
+          offsets[5],
         )] ??
         BillingCycle.monthly,
-    suggestedPrice: reader.readDoubleOrNull(offsets[5]),
+    suggestedPrice: reader.readDoubleOrNull(offsets[6]),
   );
   object.id = id;
   return object;
@@ -141,16 +148,18 @@ P _serviceTemplateDeserializeProp<P>(
     case 1:
       return (reader.readBoolOrNull(offset) ?? false) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 3:
-      return (reader.readStringOrNull(offset) ?? '') as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 5:
       return (_ServiceTemplatesuggestedCycleValueEnumMap[reader.readByteOrNull(
                 offset,
               )] ??
               BillingCycle.monthly)
           as P;
-    case 5:
+    case 6:
       return (reader.readDoubleOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -582,6 +591,15 @@ extension ServiceTemplateQueryFilter
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+  isDefaultEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'isDefault', value: value),
       );
     });
   }
@@ -1067,6 +1085,20 @@ extension ServiceTemplateQuerySortBy
   }
 
   QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+  sortByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+  sortByIsDefaultDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
   sortByIsPopular() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isPopular', Sort.asc);
@@ -1164,6 +1196,20 @@ extension ServiceTemplateQuerySortThenBy
   }
 
   QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+  thenByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+  thenByIsDefaultDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
   thenByIsPopular() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isPopular', Sort.asc);
@@ -1243,6 +1289,13 @@ extension ServiceTemplateQueryWhereDistinct
   }
 
   QueryBuilder<ServiceTemplate, ServiceTemplate, QDistinct>
+  distinctByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDefault');
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QDistinct>
   distinctByIsPopular() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isPopular');
@@ -1291,6 +1344,12 @@ extension ServiceTemplateQueryProperty
   QueryBuilder<ServiceTemplate, String?, QQueryOperations> categoryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'category');
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, bool, QQueryOperations> isDefaultProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDefault');
     });
   }
 

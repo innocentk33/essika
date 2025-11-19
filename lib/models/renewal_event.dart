@@ -2,7 +2,7 @@ import 'package:isar_community/isar.dart';
 
 part 'renewal_event.g.dart';
 
-@collection
+@Collection()
 class RenewalEvent {
   Id id = Isar.autoIncrement;
 
