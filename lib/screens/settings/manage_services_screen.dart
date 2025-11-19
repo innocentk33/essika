@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/service_template.dart';
 import '../../../providers/service_template.dart';
-import '../../../core/enum/billing_cycle.dart';
+import 'package:essika/screens/settings/widgets/service_form_sheet.dart';
 
 class ManageServicesScreen extends StatefulWidget {
   const ManageServicesScreen({super.key});
@@ -36,7 +36,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
       backgroundColor: const Color(0xFFF5F2FF),
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: _showAddDialog, icon: const Icon(Icons.add)),
+          IconButton(onPressed: _showAddSheet, icon: const Icon(Icons.add)),
         ],
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -97,7 +97,7 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
                       final service = services[index];
                       return _ServiceCard(
                         service: service,
-                        onEdit: () => _showEditDialog(service),
+                        onEdit: () => _showEditSheet(service),
                         onDelete: () => _confirmDelete(service),
                       );
                     },
@@ -108,120 +108,37 @@ class _ManageServicesScreenState extends State<ManageServicesScreen> {
     );
   }
 
-  void _showAddDialog() {
-    _showServiceDialog(null);
-  }
-
-  void _showEditDialog(ServiceTemplate service) {
-    _showServiceDialog(service);
-  }
-
-  void _showServiceDialog(ServiceTemplate? service) {
-    final isEdit = service != null;
-    final nameController = TextEditingController(text: service?.name ?? '');
-    final priceController = TextEditingController(
-      text: service?.suggestedPrice?.toString() ?? '',
-    );
-    final categoryController =
-        TextEditingController(text: service?.category ?? '');
-    BillingCycle selectedCycle = service?.suggestedCycle ?? BillingCycle.monthly;
-
-    showDialog(
+  void _showAddSheet() {
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          title: Text(isEdit ? 'Modifier le service' : 'Nouveau service'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nom du service',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: priceController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Prix suggéré',
-                    border: OutlineInputBorder(),
-                    suffixText: '€',
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: categoryController,
-                  decoration: const InputDecoration(
-                    labelText: 'Catégorie',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<BillingCycle>(
-                  value: selectedCycle,
-                  decoration: const InputDecoration(
-                    labelText: 'Cycle suggéré',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: BillingCycle.values.map((cycle) {
-                    return DropdownMenuItem(
-                      value: cycle,
-                      child: Text(
-                        cycle == BillingCycle.monthly ? 'Mensuel' : 'Annuel',
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setDialogState(() => selectedCycle = value);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Annuler'),
-            ),
-            TextButton(
-              onPressed: () {
-                final name = nameController.text.trim();
-                if (name.isEmpty) return;
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => ServiceFormSheet(
+        onSaved: (service) {
+          context.read<ServiceTemplateProvider>().addCustomService(service);
+          Navigator.of(ctx).pop();
+        },
+      ),
+    );
+  }
 
-                final price = double.tryParse(
-                  priceController.text.replaceAll(',', '.'),
-                );
-                final category = categoryController.text.trim();
-
-                if (isEdit) {
-                  service
-                    ..name = name
-                    ..suggestedPrice = price
-                    ..category = category.isNotEmpty ? category : null
-                    ..suggestedCycle = selectedCycle;
-                  context.read<ServiceTemplateProvider>().updateService(service);
-                } else {
-                  final newService = ServiceTemplate()
-                    ..name = name
-                    ..suggestedPrice = price
-                    ..category = category.isNotEmpty ? category : null
-                    ..suggestedCycle = selectedCycle;
-                  context.read<ServiceTemplateProvider>().addCustomService(newService);
-                }
-
-                Navigator.of(ctx).pop();
-              },
-              child: Text(isEdit ? 'Modifier' : 'Ajouter'),
-            ),
-          ],
-        ),
+  void _showEditSheet(ServiceTemplate service) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => ServiceFormSheet(
+        service: service,
+        onSaved: (updated) {
+          // met à jour en place
+          service
+            ..name = updated.name
+            ..suggestedPrice = updated.suggestedPrice
+            ..category = updated.category
+            ..suggestedCycle = updated.suggestedCycle;
+          context.read<ServiceTemplateProvider>().updateService(service);
+          Navigator.of(ctx).pop();
+        },
       ),
     );
   }
@@ -285,7 +202,7 @@ class _ServiceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: const Color(0x08000000),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -356,4 +273,3 @@ class _ServiceCard extends StatelessWidget {
     );
   }
 }
-

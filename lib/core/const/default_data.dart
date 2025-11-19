@@ -79,6 +79,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/netflix.png',
   ),
   ServiceTemplate(
     name: 'Disney+',
@@ -95,7 +96,9 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/prime_video.png',
   ),
+
   ServiceTemplate(
     name: 'Canal+',
     category: 'Divertissement',
@@ -129,6 +132,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/spotify.png',
   ),
   ServiceTemplate(
     name: 'Apple Music',
@@ -153,6 +157,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/youtube.png',
   ),
   ServiceTemplate(
     name: 'Audible',
@@ -179,6 +184,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/google_one.png',
   ),
   ServiceTemplate(
     name: 'Dropbox',
@@ -196,6 +202,7 @@ final defaultServices = [
     isPopular: false,
     isDefault: true,
   ),
+
 
   // Sport & Fitness
   ServiceTemplate(
@@ -231,6 +238,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
+    logoUrl: '/assets/logos/chatgpt.png',
   ),
   ServiceTemplate(
     name: 'Duolingo Plus',
@@ -258,6 +266,15 @@ final defaultServices = [
   ),
 
   // Transport
+  ServiceTemplate(
+    name: 'Amazon Prime',
+    category: 'Transport',
+    suggestedPrice: 6.99,
+    suggestedCycle: BillingCycle.monthly,
+    isPopular: true,
+    isDefault: true,
+    logoUrl: '/assets/logos/amazon_prime.png',
+  ),
   ServiceTemplate(
     name: 'Navigo (Pass Navigo)',
     category: 'Transport',

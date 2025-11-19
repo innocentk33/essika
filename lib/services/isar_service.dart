@@ -26,6 +26,10 @@ class IsarService {
 
     // Initialiser les données par défaut au premier lancement
     await _initializeDefaultData();
+
+    // Debug: Reset des données par défaut
+    //await resetDefaultData();
+
   }
 
   // Ajout d'un getter pour accéder à l'instance Isar
