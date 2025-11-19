@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                'Settings',
+                'Paramètres',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -38,13 +38,6 @@ class SettingsScreen extends StatelessWidget {
             // Section Gestion
             SettingSection(
               children: [
-                SettingTile(
-                  icon: Icons.label_outline,
-                  title: 'Gérer les catégories',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/manage-categories');
-                  },
-                ),
                 SettingTile(
                   icon: Icons.apps_outlined,
                   title: 'Gérer les services',
@@ -70,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingSwitchTile(
                   icon: Icons.dark_mode_outlined,
-                  title: 'Dark mode',
+                  title: 'Mode claire/sombre',
                   value: settingsProvider.isDarkMode,
                   onChanged: (_) {
                     settingsProvider.toggleDarkMode();
@@ -101,7 +94,7 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 SettingTile(
                   icon: CupertinoIcons.info,
-                  title: 'About',
+                  title: 'A propos',
                   onTap: () {
                     _showAboutDialog(context);
                   },
