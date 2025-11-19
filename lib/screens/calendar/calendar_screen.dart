@@ -1,5 +1,5 @@
 import 'package:essika/screens/calendar/widgets/calendar_widget.dart';
-import 'package:essika/screens/calendar/widgets/month_stats.dart';
+import 'package:essika/screens/calendar/widgets/subscription_card.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -48,9 +48,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
         final data = snapshot.data!;
 
+        // Récupérer tous les événements du mois
+        final allMonthEvents =
+            data.renewalsByMonth.values.expand((list) => list).toList()
+              ..sort((a, b) => a.renewalDate.compareTo(b.renewalDate));
+
         return Scaffold(
           appBar: AppBar(
             title: const Text('Calendrier'),
+            centerTitle: false,
             actions: [
               IconButton(
                 icon: const Icon(Icons.today),
@@ -64,30 +70,83 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ],
           ),
-          body: Column(
-            children: [
-              MonthStatsWidget(
-                focusedDay: _focusedDay,
-                monthlyTotal: data.monthlyTotal,
-              ),
-              CalendarWidget(
-                focusedDay: _focusedDay,
-                selectedDay: _selectedDay,
-                calendarFormat: CalendarFormat.month,
-                renewalsByMonth: data.renewalsByMonth,
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDay = selectedDay;
-                    _focusedDay = focusedDay;
-                  });
-                },
-                onPageChanged: (focusedDay) {
-                  setState(() {
-                    _focusedDay = focusedDay;
-                  });
-                },
-              ),
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                CalendarWidget(
+                  focusedDay: _focusedDay,
+                  selectedDay: _selectedDay,
+                  calendarFormat: CalendarFormat.month,
+                  renewalsByMonth: data.renewalsByMonth,
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  },
+                  onPageChanged: (focusedDay) {
+                    setState(() {
+                      _focusedDay = focusedDay;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Section titre pour les abonnements du mois
+                if (allMonthEvents.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Paiement à venir (${data.monthlyTotal.toStringAsFixed(2)} €)',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+
+                // GridView des cartes d'abonnements
+                allMonthEvents.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.all(40),
+                        child: Text(
+                          'Aucun abonnement ce mois',
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      )
+                    : GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 0.85,
+                            ),
+                        itemCount: allMonthEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = allMonthEvents[index];
+                          final serviceName =
+                              data.eventServiceNames[event.id] ??
+                              'Service inconnu';
+                          return SubscriptionCard(
+                            event: event,
+                            serviceName: serviceName,
+                          );
+                        },
+                      ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         );
       },
@@ -105,13 +164,34 @@ class _CalendarScreenState extends State<CalendarScreen> {
       _focusedDay.month,
     );
 
-    return _CalendarData(renewals, total);
+    // Récupérer tous les IDs uniques de subscriptions
+    final allEvents = renewals.values.expand((list) => list).toList();
+    final subscriptionIds = allEvents.map((e) => e.subscriptionId).toSet();
+
+    // Créer un map event.id -> serviceName
+    final eventServiceNames = <int, String>{};
+    for (final id in subscriptionIds) {
+      final subscription = await provider.getSubscriptionById(id);
+      if (subscription != null) {
+        // Trouver tous les events de cette subscription
+        for (final event in allEvents.where((e) => e.subscriptionId == id)) {
+          eventServiceNames[event.id] = subscription.serviceName;
+        }
+      }
+    }
+
+    return _CalendarData(renewals, total, eventServiceNames);
   }
 }
 
 class _CalendarData {
   final Map<DateTime, List<RenewalEvent>> renewalsByMonth;
   final double monthlyTotal;
+  final Map<int, String> eventServiceNames; // event.id -> serviceName
 
-  _CalendarData(this.renewalsByMonth, this.monthlyTotal);
+  _CalendarData(
+    this.renewalsByMonth,
+    this.monthlyTotal,
+    this.eventServiceNames,
+  );
 }
