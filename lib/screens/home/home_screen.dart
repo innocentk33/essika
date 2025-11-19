@@ -9,17 +9,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Mes Abonnements'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // Implémentation recherche
-            },
-          ),
-        ],
-      ),
       body: Consumer<SubscriptionProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading) {

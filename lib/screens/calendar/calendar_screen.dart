@@ -18,7 +18,6 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   late DateTime _focusedDay;
   late DateTime _selectedDay;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
 
   @override
   void initState() {
@@ -37,20 +36,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final provider = context.watch<SubscriptionProvider>();
 
     if (provider.isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Calendrier')),
-        body: const Center(child: CircularProgressIndicator()),
-      );
+      const Center(child: CircularProgressIndicator());
     }
 
     return FutureBuilder<_CalendarData>(
       future: _loadCalendarData(provider),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Calendrier')),
-            body: const Center(child: CircularProgressIndicator()),
-          );
+          const Center(child: CircularProgressIndicator());
         }
 
         final data = snapshot.data!;
@@ -80,17 +73,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
               CalendarWidget(
                 focusedDay: _focusedDay,
                 selectedDay: _selectedDay,
-                calendarFormat: _calendarFormat,
+                calendarFormat: CalendarFormat.month,
                 renewalsByMonth: data.renewalsByMonth,
                 onDaySelected: (selectedDay, focusedDay) {
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
-                  });
-                },
-                onFormatChanged: (format) {
-                  setState(() {
-                    _calendarFormat = format;
                   });
                 },
                 onPageChanged: (focusedDay) {

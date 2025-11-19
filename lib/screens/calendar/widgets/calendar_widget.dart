@@ -10,7 +10,6 @@ class CalendarWidget extends StatefulWidget {
   final CalendarFormat calendarFormat;
   final Map<DateTime, List<RenewalEvent>> renewalsByMonth;
   final Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
-  final Function(CalendarFormat format) onFormatChanged;
   final Function(DateTime focusedDay) onPageChanged;
 
   const CalendarWidget({
@@ -20,7 +19,6 @@ class CalendarWidget extends StatefulWidget {
     required this.calendarFormat,
     required this.renewalsByMonth,
     required this.onDaySelected,
-    required this.onFormatChanged,
     required this.onPageChanged,
   });
 
@@ -38,7 +36,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       selectedDayPredicate: (day) => isSameDay(widget.selectedDay, day),
       calendarFormat: widget.calendarFormat,
       locale: 'fr_FR',
-
       calendarStyle: CalendarStyle(
         markersMaxCount: 1,
         markerDecoration: BoxDecoration(
@@ -56,7 +53,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ),
 
       headerStyle: HeaderStyle(
-        formatButtonVisible: true,
+        formatButtonVisible: false,
         titleCentered: true,
         formatButtonShowsNext: false,
         formatButtonDecoration: BoxDecoration(
@@ -69,7 +66,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ),
 
       onDaySelected: widget.onDaySelected,
-      onFormatChanged: widget.onFormatChanged,
       onPageChanged: widget.onPageChanged,
 
       calendarBuilders: CalendarBuilders(
