@@ -43,7 +43,7 @@ class _AppNavigationState extends State<AppNavigation> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Réglages',
+            label: 'Paramètres',
           ),
         ],
       ),

@@ -23,20 +23,17 @@ class WeekCalendarWidget extends StatelessWidget {
               (index) => startOfWeek.add(Duration(days: index)),
         );
 
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: weekDays.map((day) {
-              final isToday = isSameDay(day, now);
-              final hasEvent = provider.hasEventsOnDate(day);
-              return WeekDayCell(
-                day: day,
-                isToday: isToday,
-                hasEvent: hasEvent,
-              );
-            }).toList(),
-          ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: weekDays.map((day) {
+            final isToday = isSameDay(day, now);
+            final hasEvent = provider.hasEventsOnDate(day);
+            return WeekDayCell(
+              day: day,
+              isToday: isToday,
+              hasEvent: hasEvent,
+            );
+          }).toList(),
         );
       },
     );

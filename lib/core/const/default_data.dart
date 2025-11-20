@@ -79,7 +79,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/netflix.png',
+    logoUrl: 'assets/logos/netflix.png',
   ),
   ServiceTemplate(
     name: 'Disney+',
@@ -96,7 +96,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/prime_video.png',
+    logoUrl: 'assets/logos/prime_video.png',
   ),
 
   ServiceTemplate(
@@ -132,7 +132,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/spotify.png',
+    logoUrl: 'assets/logos/spotify.png',
   ),
   ServiceTemplate(
     name: 'Apple Music',
@@ -157,7 +157,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/youtube.png',
+    logoUrl: 'assets/logos/youtube.png',
   ),
   ServiceTemplate(
     name: 'Audible',
@@ -184,7 +184,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/google_one.png',
+    logoUrl: 'assets/logos/google_one.png',
   ),
   ServiceTemplate(
     name: 'Dropbox',
@@ -238,7 +238,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/chatgpt.png',
+    logoUrl: 'assets/logos/chatgpt.png',
   ),
   ServiceTemplate(
     name: 'Duolingo Plus',
@@ -273,7 +273,7 @@ final defaultServices = [
     suggestedCycle: BillingCycle.monthly,
     isPopular: true,
     isDefault: true,
-    logoUrl: '/assets/logos/amazon_prime.png',
+    logoUrl: 'assets/logos/amazon_prime.png',
   ),
   ServiceTemplate(
     name: 'Navigo (Pass Navigo)',

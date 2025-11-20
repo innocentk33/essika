@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/subscription.dart';
 import '../../providers/subscription_provider.dart';
 import '../calendar/widgets/week_calendar_widget.dart';
 
@@ -13,154 +15,293 @@ class HomeScreen extends StatelessWidget {
         body: Consumer<SubscriptionProvider>(
           builder: (context, provider, _) {
             if (provider.isLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
-      
-            if (provider.subscriptions.isEmpty) {
-              return _buildEmptyState(context);
-            }
-      
-            return Column(
-              children: [
-                // Stats card (isolé avec Consumer)
-                _buildStatsCard(context),
-      
-                Row(
-                  children: [
-                    Text('Cette semaine', style: Theme.of(context).textTheme.titleMedium),
-                  ],
-                ),
-                // Vue calendrier simplifiée sur une semaine
-                 WeekCalendarWidget(),
-      
-                Row(
-                  children: [
-                    Text('Mes abonnement actifs', style: Theme.of(context).textTheme.titleMedium),
-                  ],
-                ),
-      
-                // Liste
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(16),
-                    itemCount: provider.subscriptions.length,
-                    itemBuilder: (context, index) {
-                      final sub = provider.subscriptions[index];
-                      return Card(
-                        margin: EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: Text(sub.serviceName[0].toUpperCase()),
-                          ),
-                          title: Text(sub.serviceName),
-                          subtitle: Text(
-                            '${sub.price.toStringAsFixed(2)} € / ${sub.billingCycle.name}',
-                          ),
-                          trailing: Icon(
-                            sub.isActive ? Icons.check_circle : Icons.cancel,
-                            color: sub.isActive ? Colors.green : Colors.grey,
-                          ),
-                          onTap: () {
-                            // Navigation vers le détail
-                            Navigator.pushNamed(
-                              context,
-                              '/subscription-detail',
-                              arguments: {'id': sub.id},
-                            );
-                          },
+        
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 20,
+                children: [
+                  // Stats card (toujours affichée)
+                  const StatsCard(),
+        
+                  // Section calendrier
+                  Text(
+                    'Cette semaine',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
                   ),
-                ),
-              ],
+                  const WeekCalendarWidget(),
+        
+                  // Section abonnements actifs
+                  Text(
+                    'Mes abonnements actifs',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+        
+                  // Liste ou état vide
+                  provider.subscriptions.isEmpty
+                      ? const SubscriptionsEmptyState()
+                      : SubscriptionsList(subscriptions: provider.subscriptions),
+                ],
+              ),
             );
           },
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            // Navigation vers ajout
             await Navigator.pushNamed(context, '/add-subscription');
-            // Optionnel : refresh après retour (si besoin)
-            // context.read<SubscriptionProvider>().loadSubscriptions();
           },
-          icon: Icon(Icons.add),
-          label: Text('Ajouter'),
+          icon: const Icon(Icons.add),
+          label: const Text('Ajouter'),
         ),
       ),
     );
   }
+}
 
-  Widget _buildStatsCard(BuildContext context) {
+// Widget Stateless pour les statistiques
+class StatsCard extends StatelessWidget {
+  const StatsCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<SubscriptionProvider>(
       builder: (context, provider, _) {
-        return Card(
-          margin: EdgeInsets.all(16),
-          elevation: 4,
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatItem(
-                  context,
-                  'Total mensuel',
-                  '${provider.totalMonthlyStartedThisMonth.toStringAsFixed(2)} €',
-                  Icons.euro,
-                ),
-                _buildStatItem(
-                  context,
-                  'Total annuel',
-                  '${provider.totalYearly.toStringAsFixed(2)}€',
-                  Icons.calendar_month_rounded,
-                ),
-              ],
-            ),
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              StatItem(
+                label: 'Total mensuel',
+                value: '${provider.totalMonthlyStartedThisMonth.toStringAsFixed(2)} €',
+                icon: Icons.euro_rounded,
+              ),
+              Container(
+                width: 1,
+                height: 60,
+                color: Theme.of(context).dividerColor,
+              ),
+              StatItem(
+                label: 'Total annuel',
+                value: '${provider.totalYearly.toStringAsFixed(2)} €',
+                icon: Icons.calendar_month_rounded,
+              ),
+            ],
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildStatItem(
-    BuildContext context,
-    String label,
-    String value,
-    IconData icon,
-  ) {
+// Widget Stateless pour un item de statistique
+class StatItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+
+  const StatItem({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
+      spacing: 8,
       children: [
-        Icon(icon, size: 32, color: Theme.of(context).primaryColor),
-        SizedBox(height: 8),
+        Icon(icon, size: 24, color: Theme.of(context).primaryColor),
         Text(
           value,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
-        SizedBox(height: 4),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade600,
+              ),
+        ),
       ],
     );
   }
+}
 
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
+// Widget Stateless pour l'état vide
+class SubscriptionsEmptyState extends StatelessWidget {
+  const SubscriptionsEmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 16,
         children: [
-          Icon(Icons.inbox, size: 100, color: Colors.grey),
-          SizedBox(height: 16),
+          Icon(
+            Icons.inbox_outlined,
+            size: 64,
+            color: Colors.grey.shade400,
+          ),
           Text(
             'Aucun abonnement',
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
           ),
-          SizedBox(height: 8),
           Text(
-            'Appuyez sur + pour commencer',
-            style: Theme.of(context).textTheme.bodyMedium,
+            'Ajoutez votre premier abonnement pour commencer',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey.shade600,
+                ),
+            textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Widget Stateless pour la liste des abonnements
+class SubscriptionsList extends StatelessWidget {
+  final List<Subscription> subscriptions;
+
+  const SubscriptionsList({
+    super.key,
+    required this.subscriptions,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 12,
+      children: subscriptions
+          .map((sub) => SubscriptionItem(subscription: sub))
+          .toList(),
+    );
+  }
+}
+
+// Widget Stateless pour un item d'abonnement
+class SubscriptionItem extends StatelessWidget {
+  final Subscription subscription;
+
+  const SubscriptionItem({
+    super.key,
+    required this.subscription,
+  });
+
+  Color _colorFromName(String name) {
+    final hash = name.codeUnits.fold(0, (a, b) => a + b);
+    final hue = (hash % 360).toDouble();
+    return HSVColor.fromAHSV(1, hue, 0.45, 0.85).toColor();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final hasLogo = subscription.logoUrl != null && subscription.logoUrl!.isNotEmpty;
+
+    return Card(
+      margin: EdgeInsets.zero,
+      elevation: 0,
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/subscription-detail',
+            arguments: {'id': subscription.id},
+          );
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              // Logo rectangulaire
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: hasLogo ? Colors.grey.shade50 : _colorFromName(subscription.serviceName),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: hasLogo
+                    ? Image.asset(
+                        subscription.logoUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Text(
+                              subscription.serviceName[0].toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          subscription.serviceName[0].toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      subscription.serviceName,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${subscription.price.toStringAsFixed(2)} € / ${subscription.billingCycle.name}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                subscription.isActive ? Icons.check_circle : Icons.cancel,
+                color: subscription.isActive
+                    ? Colors.green
+                    : Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:isar_community/isar.dart';
 import '../core/enum/billing_cycle.dart';
 import '../models/renewal_event.dart';
 import '../models/subscription.dart';
+import '../models/service_template.dart';
 import '../services/isar_service.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
@@ -65,6 +66,18 @@ class SubscriptionProvider extends ChangeNotifier {
 
   // CRUD Operations
   Future<void> addSubscription(Subscription subscription) async {
+    // Récupère le logo depuis ServiceTemplate si disponible
+    if (subscription.logoUrl == null || subscription.logoUrl!.isEmpty) {
+      final serviceTemplate = await _isar.serviceTemplates
+          .filter()
+          .nameEqualTo(subscription.serviceName, caseSensitive: false)
+          .findFirst();
+
+      if (serviceTemplate != null && serviceTemplate.logoUrl != null) {
+        subscription.logoUrl = serviceTemplate.logoUrl;
+      }
+    }
+
     await _isar.writeTxn(() async {
       await _isar.subscriptions.put(subscription);
     });

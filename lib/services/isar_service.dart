@@ -23,6 +23,8 @@ class IsarService {
       directory: dir.path,
       inspector: true,
     );
+    //debug
+    //clearDatabase();
 
     // Initialiser les données par défaut au premier lancement
     await _initializeDefaultData();
@@ -79,5 +81,16 @@ class IsarService {
     await _seedServiceTemplates();
 
     debugPrint('Données par défaut réinitialisées');
+  }
+  /// Reset les données de la base de données
+  static Future<void> clearDatabase() async {
+    await isar.writeTxn(() async {
+      await isar.categorys.where().deleteAll();
+      await isar.serviceTemplates.where().deleteAll();
+      await isar.subscriptions.where().deleteAll();
+      await isar.renewalEvents.where().deleteAll();
+    });
+
+    debugPrint('Base de données vidée');
   }
 }

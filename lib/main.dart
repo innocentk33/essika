@@ -12,6 +12,7 @@ import 'package:essika/screens/subscriptions/add_subscription_screen.dart';
 import 'package:essika/screens/subscriptions/detail_subscription_screen.dart';
 import 'package:essika/services/isar_service.dart';
 import 'package:flutter/material.dart';
+import 'package:essika/core/themes/theme_essika.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
@@ -40,10 +41,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Essika',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.white)),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: AppRoutes.initial,
       routes: {
         '/': (context) => AppNavigation(),

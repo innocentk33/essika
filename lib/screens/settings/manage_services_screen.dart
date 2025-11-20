@@ -181,82 +181,28 @@ class _ServiceCard extends StatelessWidget {
     required this.onDelete,
   });
 
-  Color _colorFromName(String name) {
-    final hash = name.codeUnits.fold(0, (a, b) => a + b);
-    final hue = (hash % 360).toDouble();
-    return HSVColor.fromAHSV(1, hue, 0.45, 0.85).toColor();
-  }
-
-  String _initial(String name) =>
-      (name.isNotEmpty ? name[0].toUpperCase() : '?');
-
   @override
   Widget build(BuildContext context) {
-    final bg = _colorFromName(service.name);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color(0x08000000),
+            color: Color(0x08000000),
             blurRadius: 8,
-            offset: const Offset(0, 3),
+            offset: Offset(0, 3),
           ),
         ],
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: bg,
-            child: Text(
-              _initial(service.name),
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
+          _ServiceLogo(service: service),
           const SizedBox(width: 14),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  service.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                if (service.category != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    service.category!,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-                if (service.suggestedPrice != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    '${service.suggestedPrice!.toStringAsFixed(2)} €',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade700,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ],
-            ),
+            child: _ServiceInfo(service: service),
           ),
           IconButton(
             icon: const Icon(Icons.edit_outlined, size: 20),
@@ -270,6 +216,114 @@ class _ServiceCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ServiceLogo extends StatelessWidget {
+  final ServiceTemplate service;
+
+  const _ServiceLogo({required this.service});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasLogo = service.logoUrl != null && service.logoUrl!.isNotEmpty;
+
+    if (hasLogo) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Image.asset(
+          service.logoUrl!,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return _InitialLogo(serviceName: service.name);
+          },
+        ),
+      );
+    }
+
+    return _InitialLogo(serviceName: service.name);
+  }
+}
+
+class _InitialLogo extends StatelessWidget {
+  final String serviceName;
+
+  const _InitialLogo({required this.serviceName});
+
+  @override
+  Widget build(BuildContext context) {
+    final hash = serviceName.codeUnits.fold(0, (a, b) => a + b);
+    final hue = (hash % 360).toDouble();
+    final color = HSVColor.fromAHSV(1, hue, 0.45, 0.85).toColor();
+    final initial = serviceName.isNotEmpty ? serviceName[0].toUpperCase() : '?';
+
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+        child: Text(
+          initial,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ServiceInfo extends StatelessWidget {
+  final ServiceTemplate service;
+
+  const _ServiceInfo({required this.service});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          service.name,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (service.category != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            service.category!,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ],
+        if (service.suggestedPrice != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            '${service.suggestedPrice!.toStringAsFixed(2)} €',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
